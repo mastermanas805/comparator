@@ -386,8 +386,41 @@ function App() {
         <li><strong>Modern CSS:</strong> Responsive design with optimized layouts and accessibility</li>
       </ul>
 
+      <h2>👥 Contributing & Code Ownership</h2>
       <p>
-        <a href="https://github.com/yourusername/comparator" target="_blank" rel="noopener noreferrer">
+        This is an open-source project and we welcome contributions from the community!
+      </p>
+      <div className="contribution-info">
+        <div className="info-section">
+          <h3>📋 Code Owner</h3>
+          <p>
+            <strong>Repository:</strong> <a href="https://github.com/mastermanas805/comparator" target="_blank" rel="noopener noreferrer">
+              github.com/mastermanas805/comparator
+            </a>
+          </p>
+          <p>
+            <strong>Maintainer:</strong> mastermanas805
+          </p>
+        </div>
+
+        <div className="info-section">
+          <h3>🤝 How to Contribute</h3>
+          <ul>
+            <li><strong>Issues:</strong> Report bugs or request features on GitHub</li>
+            <li><strong>Pull Requests:</strong> Submit code improvements and new features</li>
+            <li><strong>Documentation:</strong> Help improve guides and examples</li>
+            <li><strong>Testing:</strong> Add test cases and improve coverage</li>
+          </ul>
+          <p>
+            See our <a href="https://github.com/mastermanas805/comparator/blob/main/CONTRIBUTING.md" target="_blank" rel="noopener noreferrer">
+              Contributing Guide
+            </a> for detailed instructions on setting up the development environment and submission guidelines.
+          </p>
+        </div>
+      </div>
+
+      <p>
+        <a href="https://github.com/mastermanas805/comparator" target="_blank" rel="noopener noreferrer">
           View source code on GitHub →
         </a>
       </p>
