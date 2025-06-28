@@ -47,18 +47,11 @@ const InfoTooltip: React.FC<InfoTooltipProps> = ({ title, description, example }
   return (
     <>
       <div className="info-tooltip-container">
-        <button
-          type="button"
-          className="info-button"
-          onClick={handleToggle}
-          aria-label={`Information about ${title}`}
-        >
-          i
-        </button>
+        <i className="bi bi-info-circle" onClick={handleToggle}></i>
       </div>
 
       {isVisible && (
-        <>
+          <>
           <div className="tooltip-backdrop" onClick={handleBackdropClick} />
           <div className="tooltip-content">
             <button
