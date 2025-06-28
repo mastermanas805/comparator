@@ -11,6 +11,7 @@ const formatOptions: { label: string; value: SupportedFormat | 'auto' }[] = [
   { label: 'YAML', value: 'yaml' },
   { label: 'TOML', value: 'toml' },
   { label: 'XML', value: 'xml' },
+  { label: 'CSV', value: 'csv' },
 ];
 
 type Route = 'home' | 'about' | 'api';
@@ -236,7 +237,7 @@ function App() {
           />
           <input
             type="file"
-            accept=".json,.yaml,.yml,.toml,.xml,.txt"
+            accept=".json,.yaml,.yml,.toml,.xml,.csv,.txt"
             onChange={e => handleFile(e, setFile1, setFile1Filename)}
             style={{ marginTop: 8 }}
           />
@@ -251,7 +252,7 @@ function App() {
           />
           <input
             type="file"
-            accept=".json,.yaml,.yml,.toml,.xml,.txt"
+            accept=".json,.yaml,.yml,.toml,.xml,.csv,.txt"
             onChange={e => handleFile(e, setFile2, setFile2Filename)}
             style={{ marginTop: 8 }}
           />
@@ -277,7 +278,7 @@ function App() {
             original={result.originalNormalized}
             modified={result.modifiedNormalized}
             diff={result.diff}
-            format={format === 'auto' ? 'json' : format}
+            format={format === 'auto' && result.detectedFormats ? result.detectedFormats.original : format === 'auto' ? 'json' : format}
           />
         ) : (
           <div className="placeholder">Diff output will appear here.</div>
@@ -514,7 +515,7 @@ console.log(result.detectedFormats);
       <ul>
         <li><code>original</code> (string): Original content</li>
         <li><code>modified</code> (string): Modified content</li>
-        <li><code>type</code> (optional): 'json' | 'yaml' | 'toml' | 'xml'</li>
+        <li><code>type</code> (optional): 'json' | 'yaml' | 'toml' | 'xml' | 'csv'</li>
         <li><code>originalFilename</code> (optional): For auto-detection</li>
         <li><code>modifiedFilename</code> (optional): For auto-detection</li>
         <li><code>options</code> (optional): Configuration object</li>

@@ -71,7 +71,7 @@ export function semanticCompare({
 
     // If formats don't match, use the more structured one or default to JSON
     if (originalFormat !== modifiedFormat) {
-      const formatPriority: SupportedFormat[] = ['json', 'xml', 'toml', 'yaml'];
+      const formatPriority: SupportedFormat[] = ['json', 'xml', 'toml', 'csv', 'yaml'];
       const chosenFormat = formatPriority.find(f =>
         f === originalFormat || f === modifiedFormat
       ) || 'json';

@@ -13,7 +13,7 @@ export default defineConfig({
       output: {
         manualChunks: {
           vendor: ['react', 'react-dom'],
-          parsers: ['js-yaml', '@ltd/j-toml', 'fast-xml-parser'],
+          parsers: ['js-yaml', '@ltd/j-toml', 'fast-xml-parser', 'papaparse'],
           diff: ['json-diff-ts', 'react-diff-viewer-continued']
         }
       }
