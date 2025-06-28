@@ -123,6 +123,53 @@ function normalizeXml(obj: any): any {
 }
 
 /**
+ * Normalize CSV data structure
+ */
+function normalizeCsv(data: any[], options: NormalizationOptions): any[] {
+  if (!Array.isArray(data) || data.length === 0) {
+    return data;
+  }
+
+  let normalized = [...data];
+
+  // Sort rows if sortKeys is enabled (treat each row as an object to sort)
+  if (options.sortKeys) {
+    normalized = normalized.map(row => {
+      if (row && typeof row === 'object') {
+        return Object.keys(row)
+          .sort()
+          .reduce((acc, key) => {
+            acc[key] = row[key];
+            return acc;
+          }, {} as any);
+      }
+      return row;
+    });
+
+    // Sort rows by their first column value for consistent ordering
+    normalized.sort((a, b) => {
+      if (!a || !b || typeof a !== 'object' || typeof b !== 'object') {
+        return 0;
+      }
+
+      const aKeys = Object.keys(a);
+      const bKeys = Object.keys(b);
+
+      if (aKeys.length === 0 || bKeys.length === 0) {
+        return 0;
+      }
+
+      const aFirstValue = String(a[aKeys[0]] || '');
+      const bFirstValue = String(b[bKeys[0]] || '');
+
+      return aFirstValue.localeCompare(bFirstValue);
+    });
+  }
+
+  return normalized;
+}
+
+/**
  * Remove specified paths from the object
  */
 function removePaths(obj: any, paths: string[]): any {
@@ -208,6 +255,8 @@ export function normalizeData(
   if (options.sortKeys) {
     if (type === 'xml') {
       normalized = normalizeXml(normalized);
+    } else if (type === 'csv') {
+      normalized = normalizeCsv(normalized, options);
     } else {
       normalized = sortObjectKeys(normalized);
     }

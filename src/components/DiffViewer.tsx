@@ -21,6 +21,8 @@ const getLanguageFromFormat = (format: string): string => {
       return 'xml';
     case 'toml':
       return 'toml';
+    case 'csv':
+      return 'csv';
     case 'javascript':
     case 'js':
       return 'javascript';
@@ -50,18 +52,45 @@ function formatContent(obj: any, format: string): string {
     case 'xml':
       formatted = JSON.stringify(obj, null, 2);
       break;
+    case 'csv':
+      // Convert CSV data back to CSV format for display
+      if (Array.isArray(obj) && obj.length > 0) {
+        const headers = Object.keys(obj[0] || {});
+        const csvLines = [headers.join(',')];
+
+        obj.forEach(row => {
+          const values = headers.map(header => {
+            const value = row[header];
+            // Escape values that contain commas, quotes, or newlines
+            if (typeof value === 'string' && (value.includes(',') || value.includes('"') || value.includes('\n'))) {
+              return `"${value.replace(/"/g, '""')}"`;
+            }
+            return value || '';
+          });
+          csvLines.push(values.join(','));
+        });
+
+        formatted = csvLines.join('\n');
+      } else {
+        formatted = JSON.stringify(obj, null, 2);
+      }
+      break;
     default:
       formatted = JSON.stringify(obj, null, 2);
   }
 
-  // Handle very long lines by adding line breaks at reasonable points
-  return formatted.split('\n').map(line => {
-    if (line.length > 120) {
-      // For very long lines, try to break at commas or other natural break points
-      return line.replace(/,\s*/g, ',\n    ');
-    }
-    return line;
-  }).join('\n');
+  // Handle very long lines by adding line breaks at reasonable points (except for CSV)
+  if (format !== 'csv') {
+    return formatted.split('\n').map(line => {
+      if (line.length > 120) {
+        // For very long lines, try to break at commas or other natural break points
+        return line.replace(/,\s*/g, ',\n    ');
+      }
+      return line;
+    }).join('\n');
+  }
+
+  return formatted;
 }
 
 const DiffViewer: React.FC<DiffViewerProps> = ({ original, modified, diff, format }) => {

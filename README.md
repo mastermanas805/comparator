@@ -1,12 +1,12 @@
 # Semantic Compare - Privacy-First File Comparison
 
-A powerful, client-side web application for semantic comparison of YAML, JSON, TOML, and XML files. All processing happens locally in your browser - **no data ever leaves your computer**.
+A powerful, client-side web application for semantic comparison of JSON, YAML, TOML, XML, and CSV files. All processing happens locally in your browser - **no data ever leaves your computer**.
 
 ## 🚀 Features
 
 - **🔒 Privacy-First**: All processing happens locally in your browser
 - **🔍 Semantic Comparison**: Understands structure and meaning, not just text differences
-- **📁 Multi-Format Support**: JSON, YAML, TOML, XML, CSV, and plain text
+- **📁 Multi-Format Support**: JSON, YAML, TOML, XML, CSV with intelligent auto-detection
 - **🤖 Auto-Detection**: Automatically detects file formats
 - **⚙️ Configurable Options**: Control comparison behavior with advanced settings
 - **💡 Interactive Help**: Comprehensive tooltips with examples for every option
@@ -21,6 +21,7 @@ Unlike traditional diff tools that compare line-by-line, Semantic Compare unders
 - **Key Order Independence**: `{"a": 1, "b": 2}` equals `{"b": 2, "a": 1}`
 - **Type Coercion**: `"123"` can equal `123` when enabled
 - **Whitespace Normalization**: Formatting differences are ignored
+- **Column-Aware CSV**: Compares CSV data by structure, not just text
 - **Structural Understanding**: Focuses on meaningful content changes
 
 ## 🚀 Quick Start
@@ -72,6 +73,33 @@ const result = semanticCompare({
 console.log(result.identical); // true
 ```
 
+### CSV Comparison Example
+
+```javascript
+import { semanticCompare } from './lib/api';
+
+const csvOriginal = `name,age,city
+John,30,NYC
+Jane,25,LA`;
+
+const csvModified = `name,age,city,department
+John,30,NYC,Engineering
+Jane,26,LA,Marketing`;
+
+const result = semanticCompare({
+  original: csvOriginal,
+  modified: csvModified,
+  type: 'csv', // or use auto-detection
+  options: {
+    sortKeys: true,
+    coerceTypes: true
+  }
+});
+
+console.log(result.summary); // "2 differences found"
+// Detects: Jane's age change (25→26) and new department column
+```
+
 ## 🔧 Configuration Options
 
 ### Normalization Options
@@ -95,13 +123,50 @@ console.log(result.identical); // true
 | **YAML** | Human-readable, comments, references, multi-document | DevOps, configuration, documentation |
 | **TOML** | Clear syntax, native date/time, semantic understanding | Configuration files, especially Rust/Python |
 | **XML** | Structured markup, attributes, namespace handling | Enterprise systems, documents, legacy data |
-| **CSV** | Column-aware comparison, header detection, delimiter auto-detection | Data files, spreadsheets, reports |
-| **Text** | Line-by-line comparison, whitespace normalization | Code files, documentation, logs |
+| **CSV** | Column-aware comparison, header detection, type inference, row sorting | Data files, spreadsheets, reports |
+
+## 📊 CSV-Specific Features
+
+The CSV comparison engine provides advanced features for tabular data:
+
+- **🔍 Smart Detection**: Auto-detects CSV format from content structure and file extensions
+- **📋 Header Recognition**: Automatically identifies and preserves column headers
+- **🔢 Type Inference**: Converts numeric strings to numbers for semantic comparison
+- **📊 Column Alignment**: Maintains proper column structure in diff display
+- **🔄 Row Sorting**: Optional row sorting for consistent comparison
+- **⚡ Robust Parsing**: Handles quoted values, escaped characters, and edge cases
+- **🎯 Structural Diff**: Compares data meaning, not just text formatting
+
+### CSV Comparison Examples
+
+**Adding Columns:**
+```csv
+# Original
+name,age
+John,30
+
+# Modified
+name,age,city
+John,30,NYC
+```
+Result: Detects new "city" column addition
+
+**Data Changes:**
+```csv
+# Original
+name,age,salary
+John,30,50000
+
+# Modified
+name,age,salary
+John,31,55000
+```
+Result: Detects age and salary changes with precise cell-level highlighting
 
 ## 🏗️ Architecture
 
 - **Frontend**: React + TypeScript + Vite
-- **Parsing**: js-yaml, @ltd/j-toml, fast-xml-parser
+- **Parsing**: js-yaml, @ltd/j-toml, fast-xml-parser, papaparse
 - **Comparison**: json-diff-ts
 - **UI**: react-diff-viewer-continued
 - **Deployment**: GitHub Pages ready
